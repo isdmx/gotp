@@ -1,6 +1,6 @@
 module github.com/isdmx/gotp
 
-go 1.27.1
+go 1.26.0
 
 require (
 	github.com/makiuchi-d/gozxing v0.1.1
