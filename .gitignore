@@ -1,0 +1,11 @@
+# Compiled binary
+/gotp
+
+# macOS
+.DS_Store
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
