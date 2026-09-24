@@ -1,5 +1,9 @@
-# Compiled binary
+# Build artifacts
 /gotp
+*.out
+/bin/
+/dist/
+coverage.out
 
 # macOS
 .DS_Store

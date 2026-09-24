@@ -1,3 +1,5 @@
+// Command gotp extracts OTP secrets from a Google Authenticator migration
+// QR code.
 package main
 
 import (
@@ -7,6 +9,8 @@ import (
 	_ "image/png"
 	"io"
 	"os"
+
+	"github.com/isdmx/gotp/internal/version"
 )
 
 const helpText = `gotp extracts OTP secrets from a Google Authenticator migration QR code.
@@ -27,6 +31,7 @@ Arguments:
 
 Options:
   -v, --verbose   Print per-strategy decode diagnostics to stderr.
+  -V, --version   Print version information and exit.
   -h, --help      Show this help message and exit.
 
 Output:
@@ -49,6 +54,9 @@ func main() {
 		switch a {
 		case "-h", "--help":
 			fmt.Print(helpText)
+			os.Exit(0)
+		case "-V", "--version":
+			fmt.Println(version.String())
 			os.Exit(0)
 		case "-v", "--verbose":
 			verbose = true
@@ -80,7 +88,7 @@ func run(path string, out, diag io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("open image: %w", err)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	img, format, err := image.Decode(f)
 	if err != nil {
@@ -102,6 +110,8 @@ func run(path string, out, diag io.Writer) error {
 		return fmt.Errorf("parse migration payload: %w", err)
 	}
 
-	fmt.Fprint(out, formatOTPCodes(payload))
+	if _, err := fmt.Fprint(out, formatOTPCodes(payload)); err != nil {
+		return fmt.Errorf("write output: %w", err)
+	}
 	return nil
 }

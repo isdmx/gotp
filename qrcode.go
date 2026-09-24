@@ -73,13 +73,13 @@ func strategies() []decodeStrategy {
 			return decodePureCorrected(img, global)
 		}},
 		{"preprocess/default", func(img image.Image) (string, error) {
-			return decodeWithBinarizer(preprocess(img, 800), hybrid, nil)
+			return decodeWithBinarizer(preprocess(img), hybrid, nil)
 		}},
 		{"preprocess/pure-barcode", func(img image.Image) (string, error) {
-			return decodeWithBinarizer(preprocess(img, 800), hybrid, pureHints)
+			return decodeWithBinarizer(preprocess(img), hybrid, pureHints)
 		}},
 		{"preprocess/pure-corrected", func(img image.Image) (string, error) {
-			return decodePureCorrected(preprocess(img, 800), hybrid)
+			return decodePureCorrected(preprocess(img), hybrid)
 		}},
 	}
 }
@@ -101,7 +101,7 @@ func pyramidStrategies() []decodeStrategy {
 			return decodePureCorrected(img, hybrid)
 		}},
 		{"preprocess/default", func(img image.Image) (string, error) {
-			return decodeWithBinarizer(preprocess(img, 800), hybrid, nil)
+			return decodeWithBinarizer(preprocess(img), hybrid, nil)
 		}},
 	}
 }
@@ -116,7 +116,7 @@ func decodeQR(img image.Image) (string, error) {
 func decodeQRWithLog(img image.Image, format string, log io.Writer) (string, error) {
 	debugf := func(format string, args ...any) {
 		if log != nil {
-			fmt.Fprintf(log, format+"\n", args...)
+			_, _ = fmt.Fprintf(log, format+"\n", args...)
 		}
 	}
 
@@ -142,7 +142,7 @@ func decodeQRWithLog(img image.Image, format string, log io.Writer) (string, err
 		}
 	}
 
-	return "", fmt.Errorf("failed to decode QR code (image %dx%d): %v",
+	return "", fmt.Errorf("failed to decode QR code (image %dx%d): %w",
 		b.Dx(), b.Dy(), directErr)
 }
 

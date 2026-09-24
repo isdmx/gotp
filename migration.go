@@ -49,6 +49,7 @@ type MigrationPayload struct {
 	BatchID       int32
 }
 
+//nolint:gocognit // protobuf wire-format parsing is inherently a flat switch over field numbers.
 func parseMigrationPayload(b []byte) (MigrationPayload, error) {
 	var p MigrationPayload
 	for len(b) > 0 {
@@ -109,6 +110,7 @@ func parseMigrationPayload(b []byte) (MigrationPayload, error) {
 	return p, nil
 }
 
+//nolint:gocognit,gocyclo // protobuf wire-format parsing is inherently a flat switch over field numbers.
 func parseOtpParameter(b []byte) (OtpParameter, error) {
 	var op OtpParameter
 	for len(b) > 0 {

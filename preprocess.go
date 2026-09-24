@@ -128,15 +128,20 @@ func scaleNearest(img image.Image, factor int) *image.Gray {
 	return out
 }
 
+// minPreprocessSize is the minimum short-side dimension the preprocessed image
+// is upscaled to before decoding.
+const minPreprocessSize = 800
+
 // preprocess cleans up a QR code image for decoding: grayscale, Otsu
-// threshold, crop to the QR region, and upscale to at least minSize pixels.
-func preprocess(img image.Image, minSize int) *image.Gray {
+// threshold, crop to the QR region, and upscale to at least minPreprocessSize
+// pixels.
+func preprocess(img image.Image) *image.Gray {
 	g := toGray(img)
 	bin := binarize(g, otsuThreshold(g))
 	cropped := cropToDark(bin, 16)
 	short := min(cropped.Bounds().Dx(), cropped.Bounds().Dy())
-	if short > 0 && short < minSize {
-		return scaleNearest(cropped, (minSize+short-1)/short)
+	if short > 0 && short < minPreprocessSize {
+		return scaleNearest(cropped, (minPreprocessSize+short-1)/short)
 	}
 	return cropped
 }

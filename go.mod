@@ -1,4 +1,4 @@
-module gotp
+module github.com/isdmx/gotp
 
 go 1.27.1
 

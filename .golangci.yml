@@ -1,0 +1,83 @@
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  default: standard # errcheck, govet, ineffassign, staticcheck, unused
+  enable:
+    - asasalint
+    - bodyclose
+    - contextcheck
+    - copyloopvar
+    - dogsled
+    - durationcheck
+    - errorlint
+    - exhaustive
+    - funlen
+    - gocheckcompilerdirectives
+    - gochecknoinits
+    - gocognit
+    - gocritic
+    - gocyclo
+    - godot
+    - gosec
+    - misspell
+    - nakedret
+    - nilerr
+    - noctx
+    - nolintlint
+    - prealloc
+    - predeclared
+    - reassign
+    - revive
+    - unconvert
+    - unparam
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+
+  settings:
+    funlen:
+      lines: 100
+      statements: 60
+    gocyclo:
+      min-complexity: 20
+    gocognit:
+      min-complexity: 30
+    exhaustive:
+      default-signifies-exhaustive: true
+    gosec:
+      excludes:
+        # Reading user-provided file paths is the whole point of a CLI.
+        - G304
+        - G703
+        # Protobuf varints are decoded to int32/int64; the schema bounds these.
+        - G115
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+      allow-unused: false
+
+  exclusions:
+    generated: lax
+    rules:
+      # Tests may be long, use fixtures, and don't need the same rigor.
+      - path: _test\.go
+        linters:
+          - funlen
+          - gocyclo
+          - gocognit
+          - dupl
+          - gosec
+          - contextcheck
+          - errcheck
+
+formatters:
+  enable:
+    - gofumpt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/isdmx/gotp
